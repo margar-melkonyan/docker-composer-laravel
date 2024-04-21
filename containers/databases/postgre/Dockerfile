@@ -1,0 +1,7 @@
+FROM postgres:latest
+
+ENV POSTGRES_USER=postgres
+ENV POSTGRES_PASSWORD=${DB_ROOT_PASSWORD}
+ENV PGDATA=/var/lib/postgresql/data
+
+EXPOSE 5432

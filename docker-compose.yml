@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  php:
+    build: ${BUILD_PHP_PATH}
+    volumes:
+      - ${HOST_APP_BACKEND_PATH}:${CONTAINER_APP_BACKEND_PATH}
+      - ${HOST_APACHE_PATH}:${CONTAINER_APACHE_PATH}
+    environment:
+      PHP_IDE_CONFIG: serverName=Docker
+    deploy:
+        resources:
+            limits:
+              cpus: '0.25'
+              memory: '1G'
+    ports:
+      - "80:80"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  postgres:
+    build: ${BUILD_POSTGRE_PATH}
+    volumes:
+      - ${POSTGRE_HOST_PATH}:${POSTGRE_CONTAINER_PATH}
+    deploy:
+        resources:
+            limits:
+              cpus: '0.25'
+              memory: '1G'
+    ports:
+      - "5432:5432"
