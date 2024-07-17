@@ -18,14 +18,27 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
-  postgres:
-    build: ${BUILD_POSTGRE_PATH}
-    volumes:
-      - ${POSTGRE_HOST_PATH}:${POSTGRE_CONTAINER_PATH}
+  db:
+    # build: ${BUILD_MYSQL_PATH}
+    image: mysql:8.0
+    environment:
+      - MYSQL_ROOT_PASSWORD=develop
     deploy:
         resources:
             limits:
               cpus: '0.25'
               memory: '1G'
     ports:
-      - "5432:5432"
+      - "3306:3306"
+
+  # postgres:
+  #   build: ${BUILD_POSTGRE_PATH}
+  #   volumes:
+  #     - ${POSTGRE_HOST_PATH}:${POSTGRE_CONTAINER_PATH}
+  #   deploy:
+  #       resources:
+  #           limits:
+  #             cpus: '0.25'
+  #             memory: '1G'
+  #   ports:
+  #     - "5432:5432"

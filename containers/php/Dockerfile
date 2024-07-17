@@ -1,10 +1,11 @@
-FROM php:8.3-apache
+# FROM php:8.3-apache
+FROM php:8.0-apache
 
 RUN apt-get update && apt-get upgrade -y \
     && apt-get install apt-utils -y \
     #
     #    устанавливаем необходимые пакеты
-    && apt-get install git zip vim libzip-dev libgmp-dev libffi-dev libssl-dev libpq-dev -y \
+    && apt-get install git zip vim libzip-dev libpng-dev libgmp-dev libffi-dev libssl-dev libpq-dev -y \
     #
     #    Включаем необходимые расширения
     && docker-php-ext-install -j$(nproc) sockets zip gmp pcntl bcmath ffi \
@@ -15,6 +16,8 @@ RUN apt-get update && apt-get upgrade -y \
     # xdebug
     && pecl install -o -f xdebug-3.3.1 \
     && docker-php-ext-enable xdebug \
+    && docker-php-ext-install gd \
+    && docker-php-ext-install exif \
     #
     #    Чистим временные файлы
     && docker-php-source delete \
