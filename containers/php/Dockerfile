@@ -1,5 +1,5 @@
-# FROM php:8.3-apache
-FROM php:8.0-apache
+FROM php:8.3-apache
+# FROM php:8.0-apache
 
 RUN apt-get update && apt-get upgrade -y \
     && apt-get install apt-utils -y \
@@ -18,6 +18,10 @@ RUN apt-get update && apt-get upgrade -y \
     && docker-php-ext-enable xdebug \
     && docker-php-ext-install gd \
     && docker-php-ext-install exif \
+    #
+    #    Add Redis extension
+    && pecl install redis \
+    && docker-php-ext-enable redis \
     #
     #    Чистим временные файлы
     && docker-php-source delete \

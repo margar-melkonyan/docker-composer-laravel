@@ -11,8 +11,8 @@ services:
     deploy:
         resources:
             limits:
-              cpus: '0.25'
-              memory: '1G'
+              cpus: '0.65'
+              memory: '4G'
     ports:
       - "80:80"
     extra_hosts:
@@ -23,6 +23,8 @@ services:
     image: mysql:8.0
     environment:
       - MYSQL_ROOT_PASSWORD=develop
+    volumes:
+      - ${MYSQL_HOST_PATH}:${MYSQL_CONTAINER_PATH}
     deploy:
         resources:
             limits:
@@ -31,14 +33,34 @@ services:
     ports:
       - "3306:3306"
 
-  # postgres:
-  #   build: ${BUILD_POSTGRE_PATH}
-  #   volumes:
-  #     - ${POSTGRE_HOST_PATH}:${POSTGRE_CONTAINER_PATH}
-  #   deploy:
-  #       resources:
-  #           limits:
-  #             cpus: '0.25'
-  #             memory: '1G'
-  #   ports:
-  #     - "5432:5432"
+  postgres:
+    build: ${BUILD_POSTGRE_PATH}
+    volumes:
+      - ${POSTGRE_HOST_PATH}:${POSTGRE_CONTAINER_PATH}
+    environment:
+      - POSTGRES_USER=postgres
+      - PGDATA=/var/lib/postgresql/data
+      - POSTGRES_PASSWORD=${DB_ROOT_PASSWORD}
+    deploy:
+        resources:
+            limits:
+              cpus: '0.25'
+              memory: '1G'
+    ports:
+      - "5432:5432"
+
+  rabbit:
+    image: rabbitmq:3.13.7-management
+    hostname: rabbitmq
+    ports:
+      - 15672:15672
+      - 5672:5672
+
+  redis:
+    image: redis:latest
+    command:
+      - "redis-server"
+    volumes:
+      - "./databases/redis/data:/data/"
+    ports:
+      - "6379:6379"
