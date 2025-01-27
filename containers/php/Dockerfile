@@ -14,10 +14,10 @@ RUN apt-get update && apt-get upgrade -y \
     && PHP_OPENSSL=yes pecl install ev \
     && docker-php-ext-enable ev \
     # xdebug
-    && pecl install -o -f xdebug-3.3.1 \
-    && docker-php-ext-enable xdebug \
-    && docker-php-ext-install gd \
-    && docker-php-ext-install exif \
+    # && pecl install -o -f xdebug-3.3.1 \
+    # && docker-php-ext-enable xdebug \
+    # && docker-php-ext-install gd \
+    # && docker-php-ext-install exif \
     #
     #    Add Redis extension
     && pecl install redis \
@@ -33,7 +33,9 @@ RUN docker-php-ext-install \
     && a2enmod \
     rewrite
 
-COPY ./conf.d /usr/locale/etc/php/conf.d
+RUN docker-php-ext-enable pdo_mysql pdo_pgsql
+
+# COPY ./conf.d /usr/locale/etc/php/conf.d
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
 WORKDIR /var/www/
